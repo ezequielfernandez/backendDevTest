@@ -16,11 +16,6 @@
         <relativePath />
     </parent>
 
-    <properties>
-        <java.version>11</java.version>
-        <spring-cloud.version>2021.0.2</spring-cloud.version>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,7 +68,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
+                <version>2021.0.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
