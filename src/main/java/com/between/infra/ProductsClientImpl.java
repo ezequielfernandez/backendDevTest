@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import static com.between.config.CacheConfig.PRODUCTS_CACHE;
+import static com.between.config.CacheConfig.SIMILAR_PRODUCTS_CACHE;
 
 @Component
 public class ProductsClientImpl implements ProductsClient {
@@ -24,6 +25,7 @@ public class ProductsClientImpl implements ProductsClient {
         return restTemplate.getForObject(uri, ProductDto.class);
     }
 
+    @Cacheable(cacheNames = {SIMILAR_PRODUCTS_CACHE}, key = "#productId")
     public Long[] getSimilarProductIds(Long productId) throws RestClientException {
         String uri = BASE_PATH + String.format("/product/%d/similarids", productId);
 

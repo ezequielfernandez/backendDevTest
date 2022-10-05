@@ -14,11 +14,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class CacheConfig {
 
     public static final String PRODUCTS_CACHE = "productsCache";
+    public static final String SIMILAR_PRODUCTS_CACHE = "similarProductsCache";
     public static final int MINUTES = 60;
     Logger logger = LoggerFactory.getLogger(ProductsServiceImpl.class);
 
     @Async
-    @CacheEvict(allEntries = true, value = {PRODUCTS_CACHE})
+    @CacheEvict(allEntries = true, value = {PRODUCTS_CACHE, SIMILAR_PRODUCTS_CACHE})
     @Scheduled(fixedRate = MINUTES * 60 * 1000)
     public void reportCacheEvict() {
         logger.info("Flushing cache");
