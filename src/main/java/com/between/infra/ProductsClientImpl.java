@@ -1,0 +1,31 @@
+package com.between.infra;
+
+import com.between.dtos.ProductDto;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+@Component
+public class ProductsClientImpl implements ProductsClient {
+    private RestTemplate restTemplate;
+    private static final String BASE_PATH = "http://localhost:3001/";
+
+    public ProductsClientImpl() {
+        restTemplate = new RestTemplate();
+    }
+
+    public ProductDto getProduct(Long productId) throws RestClientException {
+        String uri = BASE_PATH + String.format("/product/%d", productId);
+        return restTemplate.getForObject(uri, ProductDto.class);
+    }
+
+    public List<Long> getSimilarProductIds(Long productId) throws RestClientException {
+        String uri = BASE_PATH + String.format("/product/%d/similarids", productId);
+
+        return restTemplate.getForObject(uri, List.class);
+    }
+}
