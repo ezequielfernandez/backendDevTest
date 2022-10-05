@@ -1,14 +1,15 @@
 package com.between.services;
 
 import com.between.dtos.ProductDto;
+import com.between.dtos.SimilarProductsDataDto;
 import com.between.infra.ProductsClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,8 +19,9 @@ public class ProductsServiceImpl implements ProductsService {
     @Autowired
     ProductsClient productsClient;
 
-    public List<ProductDto> getSimilarProducts(long id) throws Exception {
+    public SimilarProductsDataDto getSimilarProducts(long id) throws Exception {
         List<Long> ids = getSimilarProductIds(id);
+        AtomicInteger errorsCount = new AtomicInteger(0);
 
         List<ProductDto> similarProducts = ids.stream()
                 .map(productId -> {
@@ -28,12 +30,14 @@ public class ProductsServiceImpl implements ProductsService {
                     }
                     catch(Exception e) {
                         logger.error(e.getMessage());
+                        errorsCount.incrementAndGet();
                         return null;
                     }
                 })
                 .filter(product -> product != null )
                 .collect(Collectors.toList());
-        return similarProducts;
+
+        return SimilarProductsDataDto.builder().similarProducts(similarProducts).partialContext(errorsCount.get() != 0).build();
     }
 
     private ProductDto getProduct(long id) throws Exception {

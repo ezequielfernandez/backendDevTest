@@ -1,10 +1,7 @@
 package com.between.services;
 
-
-import com.between.dtos.ProductDto;
-
-import java.util.List;
+import com.between.dtos.SimilarProductsDataDto;
 
 public interface ProductsService {
-    List<ProductDto> getSimilarProducts(long id) throws Exception;
+    SimilarProductsDataDto getSimilarProducts(long id) throws Exception;
 }

@@ -1,6 +1,7 @@
 package unit;
 
 import com.between.dtos.ProductDto;
+import com.between.dtos.SimilarProductsDataDto;
 import com.between.infra.ProductsClient;
 import com.between.services.ProductsServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +13,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductsServiceTest {
@@ -33,10 +37,13 @@ public class ProductsServiceTest {
         Mockito.when(client.getProduct((long) 5))
                 .thenReturn(p);
 
-        List<ProductDto> similar = service.getSimilarProducts(1);
-        Assertions.assertNotNull(similar);
-        Assertions.assertEquals(1, similar.size());
-        Assertions.assertNotNull(similar.get(0));
+        SimilarProductsDataDto similarProductsDataDto = service.getSimilarProducts(1);
+        List<ProductDto> similar = similarProductsDataDto.getSimilarProducts();
+
+        assertEquals(false, similarProductsDataDto.isPartialContext());
+        assertNotNull(similarProductsDataDto.getSimilarProducts());
+        assertEquals(1, similar.size());
+        assertNotNull(similar.get(0));
     }
 
     @Test
@@ -54,10 +61,13 @@ public class ProductsServiceTest {
         Mockito.when(client.getProduct((long) 6))
                 .thenThrow(new Exception("test error"));
 
-        List<ProductDto> similar = service.getSimilarProducts(1);
-        Assertions.assertNotNull(similar);
-        Assertions.assertEquals(1, similar.size());
-        Assertions.assertNotNull(similar.get(0));
+        SimilarProductsDataDto similarProductsDataDto = service.getSimilarProducts(1);
+        List<ProductDto> similar = similarProductsDataDto.getSimilarProducts();
+
+        assertEquals(true, similarProductsDataDto.isPartialContext());
+        assertNotNull(similar);
+        assertEquals(1, similar.size());
+        assertNotNull(similar.get(0));
     }
 
     @Test
