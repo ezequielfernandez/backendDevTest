@@ -1,9 +1,12 @@
 package com.between.infra;
 
 import com.between.dtos.ProductDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import static com.between.config.CacheConfig.PRODUCTS_CACHE;
 
 @Component
 public class ProductsClientImpl implements ProductsClient {
@@ -14,6 +17,7 @@ public class ProductsClientImpl implements ProductsClient {
         restTemplate = new RestTemplate();
     }
 
+    @Cacheable(cacheNames = {PRODUCTS_CACHE}, key = "#productId")
     public ProductDto getProduct(Long productId) throws RestClientException {
         String uri = BASE_PATH + String.format("/product/%d", productId);
 
