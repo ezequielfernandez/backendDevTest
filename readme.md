@@ -34,4 +34,4 @@ The following topics will be considered:
 
 
 ## Doc
-After run the app, you can see documentation here: http://localhost:5000/swagger-ui/index.html
+After run the app, you can see documentation here: http://localhost:5000/swagger-ui.html

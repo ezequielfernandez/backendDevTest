@@ -40,12 +40,23 @@ public class ProductsServiceImpl implements ProductsService {
         return SimilarProductsDataDto.builder().similarProducts(similarProducts).partialContext(errorsCount.get() != 0).build();
     }
 
+    /**
+     * Returns a product by id
+     * @param id
+     * @return
+     * @throws Exception
+     */
     private ProductDto getProduct(long id) throws Exception {
         return productsClient.getProduct(id);
     }
 
+    /**
+     * Returns a list of similar product ids for a given product
+     * @param id
+     * @return
+     * @throws Exception
+     */
     private List<Long> getSimilarProductIds(long id) throws Exception {
         return productsClient.getSimilarProductIds(id);
     }
-
 }

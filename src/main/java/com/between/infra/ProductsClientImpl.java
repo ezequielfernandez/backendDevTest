@@ -18,6 +18,7 @@ public class ProductsClientImpl implements ProductsClient {
 
     public ProductDto getProduct(Long productId) throws RestClientException {
         String uri = BASE_PATH + String.format("/product/%d", productId);
+
         return restTemplate.getForObject(uri, ProductDto.class);
     }
 

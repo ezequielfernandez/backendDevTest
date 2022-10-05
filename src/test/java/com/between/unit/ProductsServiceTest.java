@@ -1,4 +1,4 @@
-package unit;
+package com.between.unit;
 
 import com.between.dtos.ProductDto;
 import com.between.dtos.SimilarProductsDataDto;
