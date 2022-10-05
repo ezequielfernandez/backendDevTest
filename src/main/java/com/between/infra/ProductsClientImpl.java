@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
 @Component
 public class ProductsClientImpl implements ProductsClient {
     private RestTemplate restTemplate;
@@ -22,9 +20,9 @@ public class ProductsClientImpl implements ProductsClient {
         return restTemplate.getForObject(uri, ProductDto.class);
     }
 
-    public List<Long> getSimilarProductIds(Long productId) throws RestClientException {
+    public Long[] getSimilarProductIds(Long productId) throws RestClientException {
         String uri = BASE_PATH + String.format("/product/%d/similarids", productId);
 
-        return restTemplate.getForObject(uri, List.class);
+        return restTemplate.getForObject(uri, Long[].class);
     }
 }

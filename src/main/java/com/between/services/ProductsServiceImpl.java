@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -20,13 +21,15 @@ public class ProductsServiceImpl implements ProductsService {
     ProductsClient productsClient;
 
     public SimilarProductsDataDto getSimilarProducts(long id) throws Exception {
-        List<Long> ids = getSimilarProductIds(id);
+        Long[] ids = getSimilarProductIds(id);
         AtomicInteger errorsCount = new AtomicInteger(0);
 
-        List<ProductDto> similarProducts = ids.stream()
+        List<ProductDto> similarProducts = Arrays.stream(ids)
                 .map(productId -> {
                     try {
-                        return getProduct(productId);
+                        ProductDto p = getProduct(productId);
+                        p.getId();
+                        return p;
                     }
                     catch(Exception e) {
                         logger.error(e.getMessage());
@@ -35,7 +38,7 @@ public class ProductsServiceImpl implements ProductsService {
                     }
                 })
                 .filter(product -> product != null )
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
 
         return SimilarProductsDataDto.builder().similarProducts(similarProducts).partialContext(errorsCount.get() != 0).build();
     }
@@ -47,7 +50,8 @@ public class ProductsServiceImpl implements ProductsService {
      * @throws Exception
      */
     private ProductDto getProduct(long id) throws Exception {
-        return productsClient.getProduct(id);
+        ProductDto p = productsClient.getProduct(id);
+        return p;
     }
 
     /**
@@ -56,7 +60,7 @@ public class ProductsServiceImpl implements ProductsService {
      * @return
      * @throws Exception
      */
-    private List<Long> getSimilarProductIds(long id) throws Exception {
+    private Long[] getSimilarProductIds(long id) throws Exception {
         return productsClient.getSimilarProductIds(id);
     }
 }

@@ -30,11 +30,9 @@ public class ProductsServiceTest {
     public void getSimilarProducts_OK() throws Exception {
         ProductDto p = new ProductDto();
         Mockito.when(client.getSimilarProductIds((long) 1))
-                .thenReturn(new LinkedList<>() {{
-                    add((long) 5);
-                }});
+                .thenReturn(new Long[] { 5L });
 
-        Mockito.when(client.getProduct((long) 5))
+        Mockito.when(client.getProduct(5L))
                 .thenReturn(p);
 
         SimilarProductsDataDto similarProductsDataDto = service.getSimilarProducts(1);
@@ -50,15 +48,12 @@ public class ProductsServiceTest {
     public void getSimilarProducts_ErrorGettingLastProduct() throws Exception {
         ProductDto p = new ProductDto();
         Mockito.when(client.getSimilarProductIds((long) 1))
-                .thenReturn(new LinkedList() {{
-                    add((long) 5);
-                    add((long) 6);
-                }});
+                .thenReturn(new Long[] { 5L, 6L });
 
-        Mockito.when(client.getProduct((long) 5))
+        Mockito.when(client.getProduct(5L))
                 .thenReturn(p);
 
-        Mockito.when(client.getProduct((long) 6))
+        Mockito.when(client.getProduct(6L))
                 .thenThrow(new Exception("test error"));
 
         SimilarProductsDataDto similarProductsDataDto = service.getSimilarProducts(1);
@@ -72,7 +67,7 @@ public class ProductsServiceTest {
 
     @Test
     public void getSimilarProducts_ErrorGettingSimilars() throws Exception {
-        Mockito.when(client.getSimilarProductIds((long) 1))
+        Mockito.when(client.getSimilarProductIds(1L))
                 .thenThrow(new Exception("test error"));
 
         Assertions.assertThrows(Exception.class, () -> service.getSimilarProducts(1));
